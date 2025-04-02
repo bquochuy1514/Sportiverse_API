@@ -33,7 +33,7 @@ class ProductController extends Controller
         
         return response()->json([
             'message' => 'Product created successfully',
-           'product' => $product
+            'product' => $product
         ], 200);
     }
 
@@ -42,7 +42,10 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        return response()->json([
+            'message' => 'Product retrieved successfully',
+            'product' => $product
+        ], 200);
     }
 
     /**
@@ -50,7 +53,21 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        $fields = $request->validate([
+            'category_id' => 'exists:categories,id',
+            'name' => 'string|max:255',
+            'price' => 'integer|min:0', 
+            'description' => 'string',
+            'stock' => 'integer|min:0',
+            'image' => 'nullable|string'
+        ]);
+
+        $product->update($fields);
+
+        return response()->json([
+           'message' => 'Product updated successfully',
+            'product' => $product
+        ], 200);
     }
 
     /**
@@ -58,6 +75,9 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $product->delete();
+        return response()->json([
+          'message' => 'Product deleted successfully'
+        ], 200);
     }
 }
