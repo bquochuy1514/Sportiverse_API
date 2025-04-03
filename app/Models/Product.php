@@ -22,4 +22,29 @@ class Product extends Model
     protected $casts = [
         'price' => 'float',
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function orderDetails()
+    {
+        return $this->hasMany(Order_Detail::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function cartItems()
+    {
+        return $this->hasMany(Cart::class);
+    }
+
+    public function wishlistItems()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
 }

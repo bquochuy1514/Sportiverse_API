@@ -10,9 +10,45 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Product::all();
+        $query = Product::with('category.sport');
+
+        // Lọc theo danh mục
+        if($request->has('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        // Lọc theo môn thể thao
+        if($request->has('sport_id')) {
+            $query->whereHas('category', function($q) use ($request) {
+                $q->where('sport_id', $request->sport_id);
+            });
+        }
+
+        // Lọc theo khoảng giá
+        if ($request->has('min_price')) {
+            $query->where('price', '>=', $request->min_price);
+        }
+
+        if($request->has('max_price')) {
+            $query->where('price', '<=', $request->max_price);
+        }
+
+        // Tìm kiếm theo tên
+        if ($request->has('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Sắp xếp
+        $sortField = $request->get('sort_by', 'created_at');
+        $sortDirection = $request->get('sort_direction', 'asc');
+        $query->orderBy($sortField, $sortDirection);
+
+        // Phân trang
+        $perPage = $request->get('per_page', 15);
+
+        return response()->json($query->paginate($perPage));
     }
 
     /**
@@ -33,7 +69,7 @@ class ProductController extends Controller
         
         return response()->json([
             'message' => 'Product created successfully',
-            'product' => $product
+            'product' => $product->load('category.sport')
         ], 200);
     }
 

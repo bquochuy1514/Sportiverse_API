@@ -6,6 +6,7 @@ use App\Models\Sport;
 use App\Http\Requests\StoreSportRequest;
 use App\Http\Requests\UpdateSportRequest;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
 class SportController extends Controller
 {
@@ -14,7 +15,8 @@ class SportController extends Controller
      */
     public function index()
     {
-        return Sport::all();
+        $sports = Sport::all();
+        return response()->json(['sports' => $sports]);
     }
 
     /**
@@ -22,7 +24,15 @@ class SportController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255|unique:sports',
+        ]);
+
+        $sport = Sport::create([
+            'name' => $request->name,
+        ]);
+
+        return response()->json(['sport' => $sport, 'message' => 'Create a sport successfully'], 201);
     }
 
     /**
@@ -30,7 +40,7 @@ class SportController extends Controller
      */
     public function show(Sport $sport)
     {
-        //
+        return response()->json(['sport' => $sport]);
     }
 
     /**
@@ -38,7 +48,15 @@ class SportController extends Controller
      */
     public function update(Request $request, Sport $sport)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255|unique:sports,name,' . $sport->id,
+        ]);
+
+        $sport->update([
+            'name' => $request->name,
+        ]);
+
+        return response()->json(['sport' => $sport, 'message' => 'Successful sport update']);
     }
 
     /**
@@ -46,6 +64,12 @@ class SportController extends Controller
      */
     public function destroy(Sport $sport)
     {
-        //
+        if ($sport->categories()->count() > 0) {
+            return response()->json(['message' => 'This sport cannot be deleted because it has subcategories!'], 422);
+        }
+
+        $sport->delete();
+
+        return response()->json(['message' => 'Deleted sport successfully']);
     }
 }

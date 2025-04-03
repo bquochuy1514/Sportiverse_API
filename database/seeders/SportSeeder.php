@@ -13,6 +13,18 @@ class SportSeeder extends Seeder
      */
     public function run(): void
     {
-        Sport::factory(6)->create();
+        // Sport::factory(6)->create();
+
+        $sports = [
+            ['name' => 'Bóng đá'],
+            ['name' => 'Bóng rổ'],
+            ['name' => 'Cầu lông'],
+            ['name' => 'Bơi lội'],
+            ['name' => 'Gym'],
+        ];
+
+        foreach ($sports as $sport) {
+            Sport::create($sport);
+        }
     }
 }
