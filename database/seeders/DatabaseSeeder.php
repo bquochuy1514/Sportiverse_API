@@ -26,6 +26,15 @@ class DatabaseSeeder extends Seeder
             'address' => '12B Trương Hán Siêu - Nha Trang - Khánh Hoà'
         ]);
 
+        User::factory()->create([
+            'name' => 'Bùi Quốc Huy',
+            'email' => 'banavip12nt@gmail.com',
+            'password' => Hash::make('123456'),
+            'role' => 'customer',
+            'phone' => '0342637682',
+            'address' => '12B Trương Hán Siêu - Nha Trang - Khánh Hoà'
+        ]);
+
         // $sports = [
         //     'Bóng Đá',
         //     'Bơi Lội',
@@ -44,7 +53,7 @@ class DatabaseSeeder extends Seeder
             SportSeeder::class,
             CategorySeeder::class,
             ProductSeeder::class,
-            // DiscountSeeder::class,
+            DiscountSeeder::class,
         ]);
     }
 }

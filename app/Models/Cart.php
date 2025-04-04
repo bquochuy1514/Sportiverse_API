@@ -9,4 +9,28 @@ class Cart extends Model
 {
     /** @use HasFactory<\Database\Factories\CartFactory> */
     use HasFactory;
+
+    protected $table = 'cart';
+
+    protected $fillable = [
+        'user_id',
+        'product_id',
+        'quantity'
+    ];
+
+    /**
+     * Lấy người dùng sở hữu giỏ hàng
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Lấy sản phẩm trong giỏ hàng
+     */
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

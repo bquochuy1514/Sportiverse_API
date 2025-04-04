@@ -80,7 +80,7 @@ class ProductController extends Controller
     {
         return response()->json([
             'message' => 'Product retrieved successfully',
-            'product' => $product
+            'product' => $product->load('category.sport')
         ], 200);
     }
 
@@ -102,7 +102,7 @@ class ProductController extends Controller
 
         return response()->json([
            'message' => 'Product updated successfully',
-            'product' => $product
+            'product' => $product->load('category.sport')
         ], 200);
     }
 
@@ -111,7 +111,15 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        // Kiểm tra xem sản phẩm có trong đơn hàng nào không
+        // if ($product->orderDetails()->count() > 0) {
+        //     return response()->json([
+        //         'message' => 'This product cannot be deleted because it is already in the order details!'
+        //     ], 422);
+        // }
+
         $product->delete();
+
         return response()->json([
           'message' => 'Product deleted successfully'
         ], 200);

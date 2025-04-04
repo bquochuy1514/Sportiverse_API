@@ -18,9 +18,9 @@ return new class extends Migration
             $table->decimal('discount_value', 10, 2);
             $table->decimal('min_order_value', 10, 2)->nullable();
             $table->decimal('max_discount', 10, 2)->nullable();
-            $table->timestamp('start_date')->useCurrent();
-            $table->timestamp('end_date')->useCurrent();
-            $table->integer('usage_limit')->nullable();
+            $table->timestamp('start_date')->nullable(); // Ngày bắt đầu
+            $table->timestamp('end_date')->nullable(); // Ngày hết hạn
+            $table->integer('usage_limit')->nullable(); // Số lần sử dụng tối đa
             $table->timestamps();
         });
     }

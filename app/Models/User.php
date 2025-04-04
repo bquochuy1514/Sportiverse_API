@@ -60,7 +60,7 @@ class User extends Authenticatable
     // Mối quan hệ với Cart
     public function cart()
     {
-        return $this->hasOne(Cart::class);
+        return $this->hasMany(Cart::class);
     }
 
     // Mối quan hệ với Reviews
